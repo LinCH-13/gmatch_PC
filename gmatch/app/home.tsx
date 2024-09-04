@@ -74,6 +74,22 @@ export default function Home() {
           </Text>
         </View>
       </ThemedView>
+
+      <ThemedView>
+        <View>
+          <Text style={styles.signUpLink}>
+            <Link href="/get_position">案件情報一覧</Link>
+          </Text>
+        </View>
+      </ThemedView>
+
+      <ThemedView>
+        <View>
+          <Text style={styles.signUpLink}>
+            <Link href="/get_result">マッチング結果</Link>
+          </Text>
+        </View>
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
