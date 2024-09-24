@@ -1,36 +1,26 @@
-name: Build and Deploy to Azure Static Web Apps
-
-on:
-  push:
-    branches:
-      - LinCH
-  workflow_dispatch:
-
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
         with:
-          node-version: '20' # 根据需要选择Node版本
+          node-version: '20.x'
 
-      - name: Install dependencies
+      - name: npm install, build, and test
         run: |
+          cd gmatch
           npm install
+          npm run build --if-present
+          npm run test --if-present
+      - name: Zip artifact for deployment
+        run: zip release.zip gmatch/* -r
 
-      - name: Build the project
-        run: |
-          expo export --output-dir dist # 导出静态文件到 dist 目录
-
-      - name: Deploy to Azure Static Web Apps
-        uses: Azure/static-web-apps-deploy@v1
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          action: 'upload'
-          app_location: 'dist' # 输出目录
-          output_location: '' # 通常为空，因为我们在 app_location 中指明了
+          name: node-app
+          path: release.zip
