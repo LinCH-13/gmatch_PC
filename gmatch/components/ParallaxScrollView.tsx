@@ -69,8 +69,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 180,
+    height: 50,
     overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center", // 垂直居中
   },
   content: {
     flex: 1,

@@ -11,7 +11,7 @@ export default function Home() {
   console.log("---in home 1---");
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
+      headerBackgroundColor={{ light: "#3ab54a", dark: "#5B7E60FF" }}
       headerImage={
         <Image
           source={require("@/assets/images/gel-logo.png")}

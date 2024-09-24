@@ -3,39 +3,32 @@ import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Modal, TextInput,
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 
-interface Resume {
-  firstName: string;
-  lastName: string;
-  region: string;
-  station: string;
-  basicDesign: string;
-  coding: string;
-  detailDesign: string;
-  enLevel: string;
-  experienceYear: string;
-  integrationTest: string;
-  jaLevel: string;
-  languageSkill1: string;
-  languageSkill2: string;
-  languageSkill3: string;
-  projectManagement: string;
-  remoteWork: string;
+interface Result {
+  PartitionKey: string;
+  RowKey: string;
+  flag: string;
+  filename1: string;
+  matchedposition1: string;
+  filename2: string;
+  matchedposition2: string;
+  filename3: string;
+  matchedposition3: string;
 }
 
-const ResumePage = () => {
-  const [resumes, setResumes] = useState<Resume[]>([]);
-  const [filteredResumes, setFilteredResumes] = useState<Resume[]>([]);
+const ResultPage = () => {
+  const [results, setResults] = useState<Result[]>([]);
+  const [filteredResults, setFilteredResults] = useState<Result[]>([]);
   const [error, setError] = useState<string>("");
   const [isFilterModalVisible, setFilterModalVisible] = useState(false);
   const [filterKeyword, setFilterKeyword] = useState("");
-  const [filterJapaneseLevel, setFilterJapaneseLevel] = useState("");
+  const [filterFlag, setFilterFlag] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
-  const apiKey = "1Bn-c7hBFE6a1j_8mWzkXLPDEif86sgxvUpCnJkwMZvwAzFuKhfpVg==";
-  const apiUrl = "https://gmreguserfa.azurewebsites.net/api/func_get_resume";
+  const apiKey = "DtEH-3_SR44HXsbEO875r6WrGsPZvl3P7lb2Idh1ioy1AzFuEDnvkA==";
+  const apiUrl = "https://gmreguserfa.azurewebsites.net/api/func_get_result";
   const orgid_user = "orgid_user";
 
-  const fetchResumes = useCallback(async () => {
+  const fetchResults = useCallback(async () => {
     try {
       const response = await axios.get(apiUrl, {
         headers: {
@@ -48,42 +41,40 @@ const ResumePage = () => {
         timeout: 10000,
       });
       console.log('API Response:', response.data);
-      setResumes(response.data);
-      setFilteredResumes(response.data);
+      setResults(response.data);
+      setFilteredResults(response.data);
       setError("");
     } catch (error) {
-      console.error("Error getting resumes:", error);
-      setError("履歴書情報の取得に失敗しました。");
+      console.error("Error getting results:", error);
+      setError("結果情報の取得に失敗しました。");
     }
   }, []);
 
   useEffect(() => {
-    fetchResumes();
-  }, [fetchResumes]);
+    fetchResults();
+  }, [fetchResults]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await fetchResumes();
+    await fetchResults();
     setRefreshing(false);
-  }, [fetchResumes]);
+  }, [fetchResults]);
 
   const applyFilter = () => {
-    const filtered = resumes.filter(resume => 
-      (resume.firstName.toLowerCase().includes(filterKeyword.toLowerCase()) ||
-       resume.lastName.toLowerCase().includes(filterKeyword.toLowerCase()) ||
-       resume.languageSkill1.toLowerCase().includes(filterKeyword.toLowerCase()) ||
-       resume.languageSkill2.toLowerCase().includes(filterKeyword.toLowerCase()) ||
-       resume.languageSkill3.toLowerCase().includes(filterKeyword.toLowerCase())) &&
-      (filterJapaneseLevel === "" || resume.jaLevel === filterJapaneseLevel)
+    const filtered = results.filter(result => 
+      (result.matchedposition1.toLowerCase().includes(filterKeyword.toLowerCase()) ||
+       result.matchedposition2.toLowerCase().includes(filterKeyword.toLowerCase()) ||
+       result.matchedposition3.toLowerCase().includes(filterKeyword.toLowerCase())) &&
+      (filterFlag === "" || result.flag === filterFlag)
     );
-    setFilteredResumes(filtered);
+    setFilteredResults(filtered);
     setFilterModalVisible(false);
   };
 
   const resetFilter = () => {
     setFilterKeyword("");
-    setFilterJapaneseLevel("");
-    setFilteredResumes(resumes);
+    setFilterFlag("");
+    setFilteredResults(results);
     setFilterModalVisible(false);
   };
 
@@ -112,26 +103,21 @@ const ResumePage = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {filteredResumes.length > 0 ? (
-          filteredResumes.map((resume, index) => (
+        {filteredResults.length > 0 ? (
+          filteredResults.map((result, index) => (
             <View key={index} style={styles.item}>
-              <Text style={styles.title}>{`${resume.lastName} ${resume.firstName}`}</Text>
-              <Text>地域: {resume.region}</Text>
-              <Text>最寄り駅: {resume.station}</Text>
-              <Text>経験年数: {resume.experienceYear}年</Text>
-              <Text>日本語レベル: {resume.jaLevel}</Text>
-              <Text>英語レベル: {resume.enLevel}</Text>
-              <Text>リモートワーク: {resume.remoteWork}</Text>
-              <Text>スキル: {[resume.languageSkill1, resume.languageSkill2, resume.languageSkill3].filter(Boolean).join(', ')}</Text>
-              <Text>基本設計: {resume.basicDesign}</Text>
-              <Text>詳細設計: {resume.detailDesign}</Text>
-              <Text>コーディング: {resume.coding}</Text>
-              <Text>結合テスト: {resume.integrationTest}</Text>
-              <Text>プロジェクト管理: {resume.projectManagement}</Text>
+              <Text style={styles.title}>結果 {result.RowKey}</Text>
+              <Text>フラグ: {result.flag}</Text>
+              <Text>マッチした職位1: {result.matchedposition1}</Text>
+              <Text>ファイル名1: {result.filename1}</Text>
+              <Text>マッチした職位2: {result.matchedposition2}</Text>
+              <Text>ファイル名2: {result.filename2}</Text>
+              <Text>マッチした職位3: {result.matchedposition3}</Text>
+              <Text>ファイル名3: {result.filename3}</Text>
             </View>
           ))
         ) : (
-          <Text style={styles.noResumesText}>履歴書情報がありません。</Text>
+          <Text style={styles.noResultsText}>結果情報がありません。</Text>
         )}
       </ScrollView>
       <Modal
@@ -148,16 +134,14 @@ const ResumePage = () => {
             placeholder="キーワード検索"
           />
           <Picker
-            selectedValue={filterJapaneseLevel}
-            onValueChange={(itemValue) => setFilterJapaneseLevel(itemValue)}
+            selectedValue={filterFlag}
+            onValueChange={(itemValue) => setFilterFlag(itemValue)}
             style={styles.picker}
           >
-            <Picker.Item label="日本語レベルを選択" value="" />
-            <Picker.Item label="N1" value="N1" />
-            <Picker.Item label="N2" value="N2" />
-            <Picker.Item label="N3" value="N3" />
-            <Picker.Item label="N4" value="N4" />
-            <Picker.Item label="N5" value="N5" />
+            <Picker.Item label="フラグを選択" value="" />
+            <Picker.Item label="フラグ1" value="flag1" />
+            <Picker.Item label="フラグ2" value="flag2" />
+            <Picker.Item label="フラグ3" value="flag3" />
           </Picker>
           <TouchableOpacity style={styles.button} onPress={applyFilter}>
             <Text style={styles.buttonText}>フィルターを適用</Text>
@@ -209,7 +193,7 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: 20,
   },
-  noResumesText: {
+  noResultsText: {
     textAlign: 'center',
     fontSize: 18,
     color: 'gray',
@@ -248,6 +232,20 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginTop: 10,
   },
+  salaryInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  salaryInput: {
+    height: 40,
+    borderWidth: 1,
+    padding: 10,
+    width: '35%',
+  },
+  salarySeparator: {
+    marginHorizontal: 10,
+  },
 });
 
-export default ResumePage;
+export default ResultPage;

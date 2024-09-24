@@ -1,7 +1,6 @@
-// app(tabs)/_layout.tsx
+import { Tabs } from 'expo-router';
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { Tabs } from "expo-router";
-// icon sample  https://icons.expo.fyi/Index
+
 export default function TabsLayout() {
   return (
     <Tabs screenOptions={{ headerShown: false }}>
@@ -29,7 +28,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-      {/* Add other tabs as needed */}
       <Tabs.Screen
         name="resume"
         options={{
@@ -38,6 +36,23 @@ export default function TabsLayout() {
             <TabBarIcon name={focused ? "body" : "body"} color={color} />
           ),
         }}
+      />
+      <Tabs.Screen
+        name="result"
+        options={{
+          title: "結果",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? "list" : "list-outline"} color={color} />
+          ),
+        }}
+      />
+      {/* JobDetailScreen をタブに表示しない */}
+      <Tabs.Screen 
+        name="jobdetail" 
+        options={{ 
+          title: 'Job Detail',
+          href: null // タブバーに表示しない
+        }} 
       />
     </Tabs>
   );
