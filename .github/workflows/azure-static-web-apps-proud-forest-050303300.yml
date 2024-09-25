@@ -29,7 +29,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PROUD_FOREST_050303300 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "./../gmatch"  # 指向源码路径
+          app_location: "./"  # 指向源码路径
           api_location: ""  # 如果有 API，可以指定路径
           output_location: "dist"  # 确保这是构建输出的目录
 
