@@ -3,10 +3,10 @@ name: Expo CI
 on:
   push:
     branches:
-      - LinCH  # 针对 LinCH 分支的 push 事件触发
+      - LinCH
   pull_request:
     branches:
-      - LinCH  # 针对 LinCH 分支的 pull request 事件触发
+      - LinCH
 
 jobs:
   build:
@@ -22,14 +22,16 @@ jobs:
         with:
           node-version: '20.x'
 
-      # 3. 安装依赖项（包括 Expo CLI）
+      # 3. 切换到 gmatch 目录并安装依赖项
       - name: Install dependencies
         run: |
+          cd gmatch  # 进入包含 package.json 的目录
           npm install
           npm install -g expo-cli  # 全局安装 Expo CLI
 
       # 4. 清除缓存并启动项目
       - name: Run Expo
         run: |
-          npx expo install  # 安装 Expo 依赖
-          npx expo start -c --non-interactive  # 在无头模式下启动 Expo
+          cd gmatch  # 确保仍在正确的目录
+          npx expo install
+          npx expo start -c --non-interactive
