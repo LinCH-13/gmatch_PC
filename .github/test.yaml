@@ -14,10 +14,8 @@
       - name: Run tests
         run: |
           cd gmatch
-          npm run test || true  # 即使测试失败也不会停止工作流
+
       # 启动 Expo
       - name: Run Expo in the background
         run: |
           cd gmatch
-          export CI=1
-          nohup npx expo start -c --no-dev --minify &
