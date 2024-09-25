@@ -1,3 +1,13 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - LinCH  # 当代码推送到 LinCH 分支时触发
+  pull_request:
+    branches:
+      - LinCH  # 当有针对 LinCH 分支的 pull request 时触发
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,6 +26,7 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
+          
       - name: Zip artifact for deployment
         run: zip release.zip gmatch/* -r
 
