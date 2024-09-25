@@ -19,7 +19,7 @@ jobs:
         run: npm install
         working-directory: ./gmatch  # 设置正确的工作目录
       - name: Build the application
-        run: npx expo export:web  # 使用 npx 命令来构建项目
+        run: npx expo export -p web  # 使用 npx 命令来构建项目
       - name: List output directory
         run: ls -la web-build  # 检查输出目录的内容
       - name: Deploy to Azure
