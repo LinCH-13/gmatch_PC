@@ -10,6 +10,7 @@ npm install react-native-screens react-native-safe-area-context
 import axios from "axios";
 import { Text } from "react-native";
 import React, { useState } from "react";
+import i18n from '@/i18n'; // 导入已初始化的 i18n 实例
 import {
   Image,
   StyleSheet,
@@ -84,7 +85,9 @@ export default function signup() {
         console.log("is err resp?:", error.response);
         if (error.response) {
           console.log("err resp:", error.response);
-          setError(`Error: ${error.response.status} - ${error.response.data}`);
+
+          const translatedErrorMsg = i18n.t(error.response.data); // 获取错误消息，并翻译     
+          setError(`Error: ${error.response.status} - ${translatedErrorMsg}`);
         } else {
           setError("Failed to sign in.");
         }

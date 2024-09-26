@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useState, useRef } from "react";
+import { t } from 'i18next'; // 采用 t("") 进行翻译
+
 import {
   Image,
   StyleSheet,
@@ -54,17 +56,17 @@ export default function Login() {
 
     // 输入验证
     if (!username.trim()) {
-      setError("Username 入力してください。");
+      setError(t("Username 入力してください"));
       focusAndHighlight(setUsernameBorderColor, usernameInputRef);
       return;
     }
     if (!password.trim()) {
-      setError("Password 入力してください。");
+      setError(t("Password 入力してください"));
       focusAndHighlight(setPasswordBorderColor, passwordInputRef);
       return;
     }
     if (!organizationId.trim()) {
-      setError("Organization ID 入力してください。");
+      setError(t("Organization ID 入力してください"));
       focusAndHighlight(setOrganizationBorderColor, organizationInputRef);
       return;
     }
@@ -139,7 +141,7 @@ export default function Login() {
         }
       >
         <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">ようこそGMatchの管理画面へ</ThemedText>
+          <ThemedText type="title">{t("ようこそGMatchの管理画面へ")}</ThemedText>
           <ThemedText type="title"></ThemedText>
           <HelloWave />
         </ThemedView>
@@ -151,7 +153,7 @@ export default function Login() {
             {
               color: colorScheme === 'dark' ? 'white' : 'black' // 动态设置文字颜色
             }]}
-            >ユーザ名</Text>
+            >{t("ユーザ名")}</Text>
             <TextInput
               style={[styles.input,
               {
@@ -169,7 +171,7 @@ export default function Login() {
             <Text style={[styles.label,
             {
               color: colorScheme === 'dark' ? 'white' : 'black' // 动态设置文字颜色
-            }]} >パスワード</Text>
+            }]} >{t('パスワード')}</Text>
             <View
               style={[
                 styles.input,
@@ -217,7 +219,7 @@ export default function Login() {
           </View>
           {/* -------------------------------------------------- */}
           <Button
-            title="ログイン"
+            title={t("ログイン")}
             onPress={handleLogin}
             disabled={isSubmitting}
           />
@@ -227,10 +229,10 @@ export default function Login() {
           {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
           <Link href="./signup" style={styles.signUpLink}>
-            アカウント作成
+            {t('アカウント作成')}
           </Link>
           <Link href="/" style={styles.signUpLink}>
-            パスワードを忘れた方 (未实装)
+          {t('パスワードを忘れた方')} (未实装)
           </Link>
         </ThemedView>
         

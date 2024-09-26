@@ -11,7 +11,7 @@ import axios from "axios";
 import { Text } from "react-native";
 import React, { useState, useRef } from "react";
 import { ThemedText } from "@/components/ThemedText"; // 自定义组件，应用主题文本
-import { I18n } from 'i18n-js';
+import { t } from 'i18next'; // i18n.t("") 简化 成 t("")
 
 import {
   Image,
@@ -84,27 +84,28 @@ export default function signup() {
 
     // 输入验证
     if (!username.trim()) {
-      setError("Username 入力してください");
+      setError(t('Username 入力してください'));
       focusAndHighlight(setUsernameBorderColor, usernameInputRef);
+      console.log('翻译',t('Username 入力してください'));
       return;
     }
     if (!password.trim()) {
-      setError("Password 入力してください");
+      setError(t("Password 入力してください"));
       focusAndHighlight(setPasswordBorderColor, passwordInputRef);
       return;
     }
     if (!password2.trim()) {
-      setError("Password Check入力してください");
+      setError(t("Password Check入力してください"));
       focusAndHighlight(setPassword2BorderColor, password2InputRef);
       return;
     }
     if (!organizationId.trim()) {
-      setError("Organization ID 入力してください");
+      setError(t("Organization ID 入力してください"));
       focusAndHighlight(setOrganizationBorderColor, organizationInputRef);
       return;
     }
     if (password != password2) {
-      setError("パスワードが一致しません");
+      setError(t("パスワードが一致しません"));
       focusAndHighlight(setPasswordBorderColor, passwordInputRef);
       focusAndHighlight(setPassword2BorderColor, password2InputRef);
       return;
@@ -148,40 +149,13 @@ export default function signup() {
         console.log("エラー応答ですか？:", error.response);
         if (error.response) {
 
-          // 创建一个 I18n 实例
-          const i18n = new I18n();
-
-          // 增加翻译
-          i18n.translations = {
-            en: {
-              'User already exists.': 'ユーザ名は既に存在していますen',
-            },
-            jp: {
-              'User already exists.': 'ユーザ名は既に存在しています',
-            },
-            zh: {
-              'User already exists.': '用户已存在。',
-            },
-          };
-
-          // 获取错误消息
-          const errorMsg = error.response.data;
-
-          // 使用正则表达式提取后面的具体错误消息
-          const match = /- (.+)/.exec(errorMsg);
-          let specificErrorMsg = match ? match[1] : errorMsg;
-          
-
-          console.log("截取到的资料:", specificErrorMsg);
-
-          // 翻译具体的错误消息
-          const translatedErrorMsg = i18n.t(specificErrorMsg);
-
+          // 获取错误消息，并翻译     
+          const translatedErrorMsg = t(error.response.data);
 
           console.log("エラー応答:", error.response);
-          console.log(translatedErrorMsg); // 输出: 用户已存在。
-          setError(`Error: ${error.response.status} - ${error.response.data}`);
-          //setError(`Error: ${translatedErrorMsg}`);
+          
+          //setError(`Error: ${error.response.status} - ${error.response.data}`);
+          setError(`Error: ${error.response.status} - ${translatedErrorMsg}`);
         } else {
           setError("サインインに失敗しました");
         }
@@ -216,13 +190,13 @@ export default function signup() {
       >
 
         <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title"> Gmatch アカウント作成</ThemedText>
+          <ThemedText type="title"> {t("Gmatch アカウント作成")} </ThemedText>
         </ThemedView>
 
         <ThemedView style={styles.loginContainer}>
 
           <View style={[styles.row]}>
-            <ThemedText type="title" style={styles.label}>ユーザ名</ThemedText>
+            <ThemedText type="title" style={styles.label}>{t('ユーザ名')}</ThemedText>
             <TextInput
               style={[styles.input,
               {
@@ -237,7 +211,7 @@ export default function signup() {
           </View>
           {/* -------------------------------------------------- */}
           <View style={[styles.row]}>
-            <ThemedText type="title" style={styles.label}>パスワード</ThemedText>
+            <ThemedText type="title" style={styles.label}>{t('パスワード')}</ThemedText>
             <View style={[styles.input, styles.passwordContainer,
             { borderColor: passwordBorderColor },]}>
               <TextInput
@@ -264,7 +238,7 @@ export default function signup() {
           </View>
           {/* -------------------------------------------------- */}
           <View style={[styles.row]}>
-            <ThemedText type="title" style={styles.label}>パスワード確認</ThemedText>
+            <ThemedText type="title" style={styles.label}>{t('パスワード確認')}</ThemedText>
             <View style={[
               styles.input,
               styles.passwordContainer,
@@ -291,7 +265,7 @@ export default function signup() {
           </View>
           {/* -------------------------------------------------- */}
           <View style={[styles.row]}>
-            <ThemedText type="title" style={styles.label}>組織ID</ThemedText>
+            <ThemedText type="title" style={styles.label}>{t("組織ID")}</ThemedText>
             <TextInput
               style={[styles.input,
               {
@@ -304,7 +278,7 @@ export default function signup() {
             />
           </View>
           {/* -------------------------------------------------- */}
-          <Button title="サインイン" onPress={handleSignUp} />
+          <Button title={t("サインイン")} onPress={handleSignUp} />
           {message ? (
             <Text style={styles.successMessage}>{message}</Text>
           ) : null}
