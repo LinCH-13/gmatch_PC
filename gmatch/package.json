@@ -37,6 +37,7 @@
     "expo-web-browser": "~13.0.3",
     "gmatch": "file:",
     "i18n-js": "^4.4.3",
+    "i18next": "^23.15.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.3",
